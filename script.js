@@ -1,7 +1,7 @@
 let map;
 let marker;
 let watchId;
-
+var permiso_aviso;
 
 let retrieve_position =  (position) => {
     const lat = position.coords.latitude;
@@ -36,7 +36,7 @@ async function verificarPermisoUbicacion() {
         let permiso = await navigator.permissions.query({ name: "geolocation" });
 
         if (permiso.state === "denied") {
-            alert("Has denegado los permisos de ubicación. Ve a Ajustes > Privacidad > Ubicación y actívalos.");
+            permiso_aviso = "Has denegado los permisos de ubicación. Ve a Ajustes > Privacidad > Ubicación y actívalos.";
         }
     } catch (error) {
         console.error("Error verificando permisos de ubicación:", error);
@@ -64,7 +64,7 @@ function rastrearUbicacion() {
 
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        mensajeError = "Permiso denegado. Habilita la ubicación en tu navegador.";
+                        mensajeError = "Permiso denegado. Habilita la ubicación en tu navegador." + permiso_aviso;
                         break;
                     case error.POSITION_UNAVAILABLE:
                         mensajeError = "Ubicación no disponible.";
