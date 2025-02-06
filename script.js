@@ -3,18 +3,33 @@ let marker;
 let watchId;
 
 window.inicializarMapa = async function() {
-    map = new google.maps.Map(document.getElementById("mapa"), {
-        center: { lat: -12.0464, lng: -77.0428 },
-        zoom: 15,
-    });
 
-    marker = new google.maps.Marker({
-        position: { lat: -12.0464, lng: -77.0428 },
-        map: map,
-        title: "Tu ubicación",
-    });
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
 
-    rastrearUbicacion();
+                document.querySelector('span[name="latitud"]').textContent = lat.toFixed(6);
+                document.querySelector('span[name="longitud"]').textContent = lng.toFixed(6);
+
+                map = new google.maps.Map(document.getElementById("mapa"), {
+                    center: { lat, lng },
+                    zoom: 15,
+                });
+            
+                marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: "Tu ubicación",
+                });
+            
+                obtenerDireccion(lat, lng);
+            }
+        )
+        rastrearUbicacion();
+    }
+
 }
 
 function rastrearUbicacion() {
