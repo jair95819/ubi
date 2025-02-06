@@ -15,7 +15,7 @@ window.inicializarMapa = async function() {
 
                 map = new google.maps.Map(document.getElementById("mapa"), {
                     center: { lat, lng },
-                    zoom: 15,
+                    zoom: 25,
                 });
             
                 marker = new google.maps.Marker({
