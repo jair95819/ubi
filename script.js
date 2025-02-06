@@ -10,7 +10,6 @@ let retrieve_position =  (position) => {
     document.querySelector('span[name="latitud"]').textContent = lat.toFixed(6);
     document.querySelector('span[name="longitud"]').textContent = lng.toFixed(6);
 
-    // Mover el mapa y marcador a la nueva ubicación
     const nuevaUbicacion = { lat, lng };
 
     if (!map) {
@@ -29,11 +28,26 @@ let retrieve_position =  (position) => {
         marker.setPosition(nuevaUbicacion);
     }
 
-    // Obtener dirección con Reverse Geocoding
     obtenerDireccion(lat, lng);
 }
 
+async function verificarPermisoUbicacion() {
+    try {
+        let permiso = await navigator.permissions.query({ name: "geolocation" });
+
+        if (permiso.state === "denied") {
+            alert("Has denegado los permisos de ubicación. Ve a Ajustes > Privacidad > Ubicación y actívalos.");
+        }
+    } catch (error) {
+        console.error("Error verificando permisos de ubicación:", error);
+    }
+}
+
+
 window.inicializarMapa = async function() {
+
+    verificarPermisoUbicacion();
+
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(retrieve_position);
         rastrearUbicacion();
