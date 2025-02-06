@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJ9B6zo3VWRFhnGkJjs9i7ZZg7i0ByP9I&callback=inicializarMapa"></script>
+    <script src="./script.js"></script>
+    <title>Mi Ubicación</title>
+</head>
+<body>
+    <nav class="main-contenedor">
+        <div class="latitud-longitud">
+            <label>Latitud</label>
+            <span name="latitud">Vacío</span>
+
+            <label>Longitud</label>
+            <span name="longitud">Vacío</span>
+        </div>
+        <hr>
+        <div class="lugar-actual">
+            <label>Lugar Actual </label>
+            <label id="lugar-actual-direccion">Vacío</label>
+        </div>
+    </nav>
+
+
+    <section class="contenedor-mapa">
+        <span>Mapa</span>
+        <div id="mapa" style="height: 70vh; width: 95%;"></div>
+    </section>
+</body>
+</html>
