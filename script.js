@@ -2,30 +2,40 @@ let map;
 let marker;
 let watchId;
 
+
+let retrieve_position =  (position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+
+    document.querySelector('span[name="latitud"]').textContent = lat.toFixed(6);
+    document.querySelector('span[name="longitud"]').textContent = lng.toFixed(6);
+
+    // Mover el mapa y marcador a la nueva ubicación
+    const nuevaUbicacion = { lat, lng };
+
+    if (!map) {
+        map = new google.maps.Map(document.getElementById("mapa"), {
+            center: nuevaUbicacion,
+            zoom: 25
+        });
+
+        marker = new google.maps.Marker({
+            position: nuevaUbicacion,
+            map: map,
+            title: "Tu ubicación"
+        });
+    } else{
+        map.setCenter(nuevaUbicacion);
+        marker.setPosition(nuevaUbicacion);
+    }
+
+    // Obtener dirección con Reverse Geocoding
+    obtenerDireccion(lat, lng);
+}
+
 window.inicializarMapa = async function() {
     if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                document.querySelector('span[name="latitud"]').textContent = lat.toFixed(6);
-                document.querySelector('span[name="longitud"]').textContent = lng.toFixed(6);
-
-                map = new google.maps.Map(document.getElementById("mapa"), {
-                    center: { lat, lng },
-                    zoom: 25,
-                });
-            
-                marker = new google.maps.Marker({
-                    position: { lat, lng },
-                    map: map,
-                    title: "Tu ubicación",
-                });
-            
-                obtenerDireccion(lat, lng);
-            }
-        )
+        navigator.geolocation.getCurrentPosition(retrieve_position);
         rastrearUbicacion();
     }
 
@@ -33,22 +43,7 @@ window.inicializarMapa = async function() {
 
 function rastrearUbicacion() {
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                document.querySelector('span[name="latitud"]').textContent = lat.toFixed(6);
-                document.querySelector('span[name="longitud"]').textContent = lng.toFixed(6);
-
-                // Mover el mapa y marcador a la nueva ubicación
-                const nuevaUbicacion = { lat, lng };
-                map.setCenter(nuevaUbicacion);
-                marker.setPosition(nuevaUbicacion);
-
-                // Obtener dirección con Reverse Geocoding
-                obtenerDireccion(lat, lng);
-            },
+        navigator.geolocation.watchPosition(retrieve_position,
             (error) => {
                 console.error("Error obteniendo ubicación:", error);
                 let mensajeError = "";
