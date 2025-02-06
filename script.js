@@ -3,7 +3,6 @@ let marker;
 let watchId;
 
 window.inicializarMapa = async function() {
-
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
